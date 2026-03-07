@@ -161,6 +161,32 @@ const totalStaminaEl = document.getElementById('totalStamina');
 // 背景粒子效果
 // ===================
 
+// ===================
+// 主題切換 (Dark Mode Toggle)
+// ===================
+
+function initTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('theme');
+
+    // 預設遵循系統偏好，或上次儲存的選擇
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+    setTheme(initialTheme);
+
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        setTheme(newTheme);
+    });
+}
+
+function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+}
+
 function initParticles() {
     const container = document.getElementById('bgParticles');
     for (let i = 0; i < 30; i++) {
@@ -275,9 +301,30 @@ function updateWeaponData(id) {
     w.skill = document.getElementById(`weapon-skill-${id}`)?.value || '';
 }
 
+function animateValue(obj, start, end, duration) {
+    if (!obj) return;
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const val = Math.floor(progress * (end - start) + start);
+        obj.innerHTML = val.toLocaleString();
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
+    };
+    window.requestAnimationFrame(step);
+}
+
 function updateUI() {
     const count = weapons.size;
-    weaponCountEl.textContent = count;
+
+    // Animate weapon count
+    const oldCount = parseInt(weaponCountEl.textContent) || 0;
+    if (oldCount !== count) {
+        animateValue(weaponCountEl, oldCount, count, 600);
+    }
+
     emptyState.style.display = count === 0 ? 'block' : 'none';
     analyzeBar.style.display = count > 0 ? 'block' : 'none';
 
@@ -324,7 +371,9 @@ function analyze() {
     // 更新 header 體力
     const ins = GAME_DATA.inscription;
     const totalStamina = weaponList.length * ins.withTicket.expectedRuns * ins.staminaPerRun;
-    totalStaminaEl.textContent = totalStamina.toLocaleString();
+
+    const oldStamina = parseInt(totalStaminaEl.textContent.replace(/,/g, '')) || 0;
+    animateValue(totalStaminaEl, oldStamina, totalStamina, 800);
 
     // 顯示結果
     resultsSection.style.display = 'block';
@@ -515,7 +564,7 @@ function renderRoutePlan(weaponList) {
             for (let j = i + 1; j < validWeapons.length; j++) {
                 const w1Data = validWeapons[i];
                 const w2Data = validWeapons[j];
-                
+
                 const sharedLocs = w1Data.locations.filter(l => w2Data.locations.includes(l));
                 if (sharedLocs.length === 0) continue;
 
@@ -660,6 +709,9 @@ function init() {
 
     // 預設加一把武器
     addWeapon();
+
+    // 初始化主題
+    initTheme();
 }
 
 // Make removeWeapon globally accessible
