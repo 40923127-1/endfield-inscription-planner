@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>終末地武器刻寫規劃器 | Endfield Inscription Planner</title>
+    <meta name="description" content="明日方舟：終末地武器基質刻寫規劃工具，自動分析最佳刷取路線、CP值計算、同刷建議">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Orbitron:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Animated background particles -->
+    <div class="bg-particles" id="bgParticles"></div>
+
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 48 48" fill="none">
+                        <path d="M24 4L6 14v20l18 10 18-10V14L24 4z" stroke="currentColor" stroke-width="2"
+                            fill="none" />
+                        <path d="M24 14l-10 6v12l10 6 10-6V20l-10-6z" stroke="currentColor" stroke-width="1.5"
+                            fill="rgba(0,194,255,0.1)" />
+                        <circle cx="24" cy="24" r="4" fill="currentColor" opacity="0.8" />
+                    </svg>
+                </div>
+                <div>
+                    <h1>武器刻寫規劃器</h1>
+                    <p class="subtitle">ENDFIELD INSCRIPTION PLANNER</p>
+                </div>
+            </div>
+            <div class="header-stats" id="headerStats">
+                <div class="stat-chip">
+                    <span class="stat-label">武器數</span>
+                    <span class="stat-value" id="weaponCount">0</span>
+                </div>
+                <div class="stat-chip">
+                    <span class="stat-label">預估體力</span>
+                    <span class="stat-value" id="totalStamina">—</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Weapon Input Section -->
+        <section class="section weapon-section">
+            <div class="section-header">
+                <h2><span class="section-icon">⚔️</span> 武器詞條設定</h2>
+                <button class="btn btn-primary btn-glow" id="addWeaponBtn">
+                    <span class="btn-icon">+</span> 新增武器
+                </button>
+            </div>
+            <div class="weapons-grid" id="weaponsGrid">
+                <!-- Weapon cards injected by JS -->
+            </div>
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">🗡️</div>
+                <p>點擊「新增武器」開始規劃你的刻寫路線</p>
+            </div>
+        </section>
+
+        <!-- Analysis Button -->
+        <div class="analyze-bar" id="analyzeBar" style="display:none;">
+            <button class="btn btn-analyze btn-glow" id="analyzeBtn">
+                <span class="btn-icon">⚡</span> 分析刻寫方案
+            </button>
+        </div>
+
+        <!-- Results Section -->
+        <section class="section results-section" id="resultsSection" style="display:none;">
+            <!-- Farming Locations -->
+            <div class="result-panel" id="farmingPanel">
+                <h3><span class="section-icon">📍</span> 基質刷取地點</h3>
+                <div class="panel-content" id="farmingContent"></div>
+            </div>
+
+            <!-- CP Value Analysis -->
+            <div class="result-panel" id="cpPanel">
+                <h3><span class="section-icon">📊</span> 刻寫CP值分析</h3>
+                <div class="panel-content" id="cpContent"></div>
+            </div>
+
+            <!-- Route Planning / Engraving Strategy -->
+            <div class="result-panel" id="routePanel">
+                <h3><span class="section-icon">🗺️</span> 具體刻寫策略</h3>
+                <div class="panel-content" id="routeContent"></div>
+            </div>
+
+            <!-- Co-farming Analysis -->
+            <div class="result-panel" id="cofarmPanel" style="display:none;">
+                <!-- 合併至刻寫策略顯示，隱藏此面板 -->
+                <h3><span class="section-icon">🔗</span> 同刷合併建議</h3>
+                <div class="panel-content" id="cofarmContent"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>明日方舟：終末地 武器刻寫規劃器 — 資料僅供參考，以遊戲內實際數據為準</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
